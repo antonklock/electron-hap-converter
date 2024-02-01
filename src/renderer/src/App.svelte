@@ -6,7 +6,8 @@
   const ipcHandle = (): void => window.electron.ipcRenderer.send('ping')
 </script>
 
-<p class="text-red-400">Hello world!</p>
+<p class="text-red-400 text-4xl">Hello world!</p>
+<button class="btn btn-primary my-2">Button</button>
 <img alt="logo" class="logo" src={electronLogo} />
 <div class="creator">Powered by electron-vite</div>
 <div class="text">
