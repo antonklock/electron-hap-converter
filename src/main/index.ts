@@ -2,6 +2,8 @@ import { app, shell, BrowserWindow, ipcMain } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
+// import { convertToHap } from './utils/hapConvert'
+const { dialog } = require('electron')
 
 function createWindow(): void {
   // Create the browser window.
@@ -35,6 +37,12 @@ function createWindow(): void {
   }
 }
 
+const handleGetDirectory = async (): Promise<string | undefined> => {
+  const result = await dialog.showOpenDialog({ properties: ['openDirectory'] })
+  if (result.canceled) return undefined
+  else return result.filePaths[0]
+}
+
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
@@ -51,6 +59,14 @@ app.whenReady().then(() => {
 
   // IPC test
   ipcMain.on('ping', () => console.log('pong'))
+
+  ipcMain.handle('dialog:getDirectory', handleGetDirectory)
+
+  // ipcMain.on('openFolderPicker', async () => {
+  //   const result = await dialog.showOpenDialog({ properties: ['openDirectory'] })
+  //   if (result.canceled) return
+  //   else return result.filePaths[0]
+  // })
 
   createWindow()
 
