@@ -12,7 +12,9 @@ if (process.contextIsolated) {
     contextBridge.exposeInMainWorld('electron', electronAPI)
     contextBridge.exposeInMainWorld('api', api)
     contextBridge.exposeInMainWorld('electronAPI', {
-      selectDirectory: () => ipcRenderer.invoke('dialog:getDirectory')
+      selectDirectory: () => ipcRenderer.invoke('dialog:getDirectory'),
+      convertToHap: (inputFolder: string, outputFolder: string) =>
+        ipcRenderer.invoke('convertToHap', [inputFolder, outputFolder])
     })
   } catch (error) {
     console.error(error)

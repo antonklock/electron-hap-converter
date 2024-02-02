@@ -3,6 +3,7 @@ import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 // import { convertToHap } from './utils/hapConvert'
+import { convertDirectory } from './utils/hapConvert'
 const { dialog } = require('electron')
 
 function createWindow(): void {
@@ -43,6 +44,13 @@ const handleGetDirectory = async (): Promise<string | undefined> => {
   else return result.filePaths[0]
 }
 
+const handleConvertToHap = (inputDirectory: string, outputDirectory: string): void => {
+  console.log('inputDirectory', inputDirectory)
+  console.log('outputDirectory', outputDirectory)
+
+  convertDirectory(inputDirectory, outputDirectory)
+}
+
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
@@ -62,11 +70,10 @@ app.whenReady().then(() => {
 
   ipcMain.handle('dialog:getDirectory', handleGetDirectory)
 
-  // ipcMain.on('openFolderPicker', async () => {
-  //   const result = await dialog.showOpenDialog({ properties: ['openDirectory'] })
-  //   if (result.canceled) return
-  //   else return result.filePaths[0]
-  // })
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  ipcMain.handle('convertToHap', (event: Electron.IpcMainInvokeEvent, args: string[]) => {
+    handleConvertToHap(args[0], args[1])
+  })
 
   createWindow()
 
