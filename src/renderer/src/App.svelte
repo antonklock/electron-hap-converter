@@ -21,22 +21,47 @@
 
 <h1 class="text-4xl font-black mb-2">Convert ProRes to HAP</h1>
 
-<div class="mb-10 flex flex-col items-center">
-  <p>Input: {inputFolder}</p>
-  <div>
-    <button class="btn btn-primary" on:click={setInFolder}>Pick folder</button>
+<div class="flex flex-col items-center">
+  <p>Input:</p>
+  <div class="max-w-lg overflow-x-auto overflow-y-hidden whitespace-nowrap p-2 pb-4 mb-2">
+    <p class="break-words">
+      <!-- svelte-ignore a11y-invalid-attribute -->
+      <a
+        href="#"
+        class="text-blue-500 hover:text-blue-700 underline"
+        on:click|preventDefault={() => {
+          window.electronAPI.selectDirectory().then((dir) => {
+            if (dir) inputFolder = dir
+          })
+        }}
+      >
+        {inputFolder || 'Click to select input folder'}
+      </a>
+    </p>
+  </div>
+</div>
+<div class="mt-4 flex flex-col items-center">
+  <p>Output:</p>
+  <div class="max-w-lg overflow-x-auto overflow-y-hidden whitespace-nowrap p-2 pb-4 mb-2">
+    <p class="break-words">
+      <!-- svelte-ignore a11y-invalid-attribute -->
+      <a
+        href="#"
+        class="text-blue-500 hover:text-blue-700 underline"
+        on:click|preventDefault={() => {
+          window.electronAPI.selectDirectory().then((dir) => {
+            if (dir) outputFolder = dir
+          })
+        }}
+      >
+        {outputFolder || 'Click to select output folder'}
+      </a>
+    </p>
   </div>
 </div>
 
 {#if inputFolder.length > 0 && outputFolder.length > 0}
-  <button class="btn btn-success" on:click={convert}>Convert</button>
+  <button class="mt-8 btn btn-success" on:click={convert}>Convert</button>
 {:else}
-  <button class="btn" on:click={convert} disabled={true}>Convert</button>
+  <button class="mt-8 btn" on:click={convert} disabled={true}>Convert</button>
 {/if}
-
-<div class="mt-10 flex flex-col items-center">
-  <p>Output: {outputFolder}</p>
-  <div>
-    <button class="btn btn-primary" on:click={setOutputFolder}>Pick folder</button>
-  </div>
-</div>
